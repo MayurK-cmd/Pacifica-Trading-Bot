@@ -1,0 +1,36 @@
+[
+  {
+    "id": "20260326_135041_ETH",
+    "timestamp": "2026-03-26T13:50:41.105035+00:00",
+    "symbol": "ETH",
+    "action": "HOLD",
+    "confidence": 0.1,
+    "reasoning": "There is no clear signal from the market data; RSI is unavailable, the 24h price change is 0%, and social sentiment data is missing. Without any strong indicators, the best course of action is to wait for more information.",
+    "size_pct": 0.0,
+    "mark_price": 2082.960279,
+    "rsi_14": null,
+    "funding_rate": 0,
+    "change_24h": 0.0,
+    "sentiment_score": 0.0,
+    "mention_count": 0,
+    "order": null,
+    "pnl_usdc": null
+  },
+  {
+    "id": "20260326_135035_BTC",
+    "timestamp": "2026-03-26T13:50:35.533195+00:00",
+    "symbol": "BTC",
+    "action": "HOLD",
+    "confidence": 0.0,
+    "reasoning": "With no RSI data, no clear funding rate signal, and unavailable social sentiment, there are no strong indicators to suggest either a long or short position. It's best to hold and wait for more definitive market signals.",
+    "size_pct": 0.25,
+    "mark_price": 69600.0,
+    "rsi_14": null,
+    "funding_rate": 0,
+    "change_24h": 0.0,
+    "sentiment_score": 0.0,
+    "mention_count": 0,
+    "order": null,
+    "pnl_usdc": null
+  }
+]
