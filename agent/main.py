@@ -4,8 +4,7 @@ main.py — PacificaPilot agent loop.
 Changes:
   - Fetches account info once per cycle
   - Passes account_context (balance, equity, spot holdings) to strategy.decide()
-  - Agent will HOLD if available_to_spend is too low
-"""
+  - Agent will HOLD if available_to_spend is too low"""
 
 import os, time, requests
 from pathlib import Path
@@ -113,8 +112,7 @@ def run_cycle(cfg: dict, cycle_count: int):
     # ── Per-symbol loop ────────────────────────────────────────────────────────
     for symbol in symbols:
         try:
-            # 1. Market data
-            log.push_log(f"[{symbol}] Fetching market data...")
+            # 1. Market data            log.push_log(f"[{symbol}] Fetching market data...")
             market = mkt.get_market_snapshot(symbol)
             rsi_s  = f"{market['rsi_14']:.2f}" if market.get("rsi_14") else "N/A"
             rsi_1h = f"{market['rsi_1h']:.2f}"  if market.get("rsi_1h")  else "N/A"
@@ -146,9 +144,7 @@ def run_cycle(cfg: dict, cycle_count: int):
                     pnl_usdc=pnl,
                 )
                 log.send_heartbeat(symbol=symbol)
-                continue
-
-            pos = live_positions.get(symbol)
+                continue            pos = live_positions.get(symbol)
             market["open_position"]  = (
                 f"{pos['side']} ${pos['size']:.2f} @ ${pos['entry_price']:,.2f}"
                 if pos else "None"
@@ -173,8 +169,7 @@ def run_cycle(cfg: dict, cycle_count: int):
                 f"Reason: {decision['reasoning'][:100]}..."
             )
 
-            # 5. Execute
-            order_result = None
+            # 5. Execute            order_result = None
             pnl_usdc     = exe.compute_pnl(symbol, current_price)
 
             if decision["action"] in ("LONG", "SHORT"):
@@ -202,18 +197,15 @@ def run_cycle(cfg: dict, cycle_count: int):
             log.send_heartbeat(symbol=symbol)
 
         except Exception as e:
-            import traceback
-            log.push_log(f"[{symbol}] Cycle error: {e}")
+            import traceback            log.push_log(f"[{symbol}] Cycle error: {e}")
             log.push_log(traceback.format_exc())
             log.send_heartbeat(symbol=symbol, error=str(e))
 
 
 def main():
-    log.push_log(f"[PacificaPilot] Starting — Backend: {BACKEND_URL}  DRY_RUN: {DRY_RUN}")
+    log.push_log(f"Hey! PacificaPilot is starting up. Backend: {BACKEND_URL}, DRY_RUN: {DRY_RUN}")
     log.push_log("[PacificaPilot] All trading config pulled from backend — env vars are NOT used as fallback.")
-    cycle = 0
-
-    while True:
+    cycle = 0    while True:
         cfg = fetch_config()
 
         if cfg is None:
