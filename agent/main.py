@@ -1,12 +1,10 @@
 """
 main.py — PacificaPilot agent loop.
 
-Rules:
-  - ALL config comes from backend /api/agent/config — no env fallbacks for trading params
-  - If backend is unreachable → agent sleeps and retries, never trades
-  - If enabled=false → agent sleeps and retries, never trades
-  - If walletAddress missing → agent sleeps, never trades
-  - DRY_RUN is the only trading param that stays in env (safety override)
+Changes:
+  - Fetches account info once per cycle
+  - Passes account_context (balance, equity, spot holdings) to strategy.decide()
+  - Agent will HOLD if available_to_spend is too low
 """
 
 import os, time, requests
@@ -21,11 +19,10 @@ import strategy as strat
 import executor as exe
 import logger as log
 
-BACKEND_URL    = os.getenv("BACKEND_URL", "")          # required — no default
-AGENT_SECRET   = os.getenv("AGENT_API_SECRET", "")     # required — must match backend
-DRY_RUN        = os.getenv("DRY_RUN", "true").lower() == "true"
+BACKEND_URL  = os.getenv("BACKEND_URL", "")
+AGENT_SECRET = os.getenv("AGENT_API_SECRET", "")
+DRY_RUN      = os.getenv("DRY_RUN", "true").lower() == "true"
 
-# Validate on startup
 if not BACKEND_URL:
     print("[FATAL] BACKEND_URL is not set. Agent cannot start.")
     exit(1)
@@ -35,18 +32,10 @@ if not AGENT_SECRET:
 
 
 def _agent_headers() -> dict:
-    return {
-        "Content-Type": "application/json",
-        "x-agent-key":  AGENT_SECRET,
-    }
+    return {"Content-Type": "application/json", "x-agent-key": AGENT_SECRET}
 
 
 def fetch_config() -> dict | None:
-    """
-    Fetches full config from backend including wallet address and user settings.
-    Returns None if backend is unreachable — caller must NOT trade in this case.
-    Never falls back to env defaults for trading parameters.
-    """
     try:
         r = requests.get(
             f"{BACKEND_URL}/api/agent/config",
@@ -65,37 +54,70 @@ def fetch_config() -> dict | None:
         log.push_log(f"[Config] Backend returned error {e.response.status_code} — agent paused.")
         return None
     except Exception as e:
-        log.push_log(f"[Config] Unexpected error fetching config: {e} — agent paused.")
+        log.push_log(f"[Config] Unexpected error: {e} — agent paused.")
         return None
 
 
 def run_cycle(cfg: dict, cycle_count: int):
-    symbols       = cfg["symbols"]
-    max_pos       = cfg["maxPositionUsdc"]
-    min_conf      = cfg["minConfidence"]
-    wallet        = cfg["walletAddress"]
-    stop_loss     = cfg["stopLossPct"]
-    take_profit   = cfg["takeProfitPct"]
-    dry_run_label = "DRY RUN" if DRY_RUN else "LIVE"
+    symbols     = cfg["symbols"]
+    max_pos     = cfg["maxPositionUsdc"]
+    min_conf    = cfg["minConfidence"]
+    wallet      = cfg["walletAddress"]
+    stop_loss   = cfg["stopLossPct"]
+    take_profit = cfg["takeProfitPct"]
 
     log.push_log(f"{'='*56}")
     log.push_log(f"[PacificaPilot] Cycle #{cycle_count} — {symbols}")
-    log.push_log(f"  Mode: {dry_run_label}  |  Max: ${max_pos}  |  MinConf: {min_conf:.0%}")
+    log.push_log(f"  Mode: {'DRY RUN' if DRY_RUN else 'LIVE'}  |  Max: ${max_pos}  |  MinConf: {min_conf:.0%}")
     log.push_log(f"  Wallet: {wallet[:8]}...{wallet[-4:]}  |  SL: {stop_loss}%  TP: {take_profit}%")
     log.push_log(f"{'='*56}")
 
-    # Fetch live positions using the wallet from config
+    # ── Fetch live account info ONCE per cycle ─────────────────────────────────
+    account_context = None
+    try:
+        raw_account = exe.get_account_info(wallet)
+        if raw_account:
+            spot_balances = [
+                {
+                    "symbol": b.get("symbol"),
+                    "amount": float(b.get("amount", 0) or 0),
+                }
+                for b in (raw_account.get("spot_balances") or [])
+                if float(b.get("amount", 0) or 0) > 0
+            ]
+            account_context = {
+                "usdcBalance":      float(raw_account.get("balance",            0) or 0),
+                "accountEquity":    float(raw_account.get("account_equity",     0) or 0),
+                "spotCollateral":   float(raw_account.get("spot_collateral",    0) or 0),
+                "availableToSpend": float(raw_account.get("available_to_spend", 0) or 0),
+                "usedMargin":       float(raw_account.get("total_margin_used",  0) or 0),
+                "spotBalances":     spot_balances,
+            }
+            spot_str = ", ".join(
+                f"{b['symbol']} {b['amount']}" for b in spot_balances
+            ) or "none"
+            log.push_log(
+                f"  Account: USDC ${account_context['usdcBalance']:.2f}  "
+                f"Equity ${account_context['accountEquity']:.2f}  "
+                f"Free ${account_context['availableToSpend']:.2f}  "
+                f"Spot: {spot_str}"
+            )
+    except Exception as e:
+        log.push_log(f"  [Account] Could not fetch account info: {e} — proceeding without balance context")
+
+    # ── Fetch live positions ───────────────────────────────────────────────────
     live_positions = exe.get_open_positions(wallet)
     if live_positions:
         log.push_log(f"  Open positions: {list(live_positions.keys())}")
 
+    # ── Per-symbol loop ────────────────────────────────────────────────────────
     for symbol in symbols:
         try:
             # 1. Market data
             log.push_log(f"[{symbol}] Fetching market data...")
             market = mkt.get_market_snapshot(symbol)
             rsi_s  = f"{market['rsi_14']:.2f}" if market.get("rsi_14") else "N/A"
-            rsi_1h = f"{market['rsi_1h']:.2f}" if market.get("rsi_1h") else "N/A"
+            rsi_1h = f"{market['rsi_1h']:.2f}"  if market.get("rsi_1h")  else "N/A"
             log.push_log(
                 f"  Price: ${market['mark_price']:,.2f}  "
                 f"RSI 5m: {rsi_s}  RSI 1h: {rsi_1h}  "
@@ -104,7 +126,7 @@ def run_cycle(cfg: dict, cycle_count: int):
 
             current_price = market["mark_price"]
 
-            # 2. Stop-loss / take-profit check using config values
+            # 2. Stop-loss / take-profit
             exit_triggered, exit_reason = exe.should_exit(
                 symbol, current_price, stop_loss, take_profit
             )
@@ -142,13 +164,13 @@ def run_cycle(cfg: dict, cycle_count: int):
                 f"Trending: {sentiment['trending_score']:.0f}"
             )
 
-            # 4. Decision via Gemini
+            # 4. Decision — passes account_context and max_pos to Gemini
             log.push_log(f"[{symbol}] Asking Gemini...")
-            decision = strat.decide(market, sentiment)
+            decision = strat.decide(market, sentiment, account_context, max_pos)
             log.push_log(
                 f"  Decision: {decision['action']} "
                 f"(conf {decision['confidence']:.0%})  "
-                f"Reason: {decision['reasoning'][:80]}..."
+                f"Reason: {decision['reasoning'][:100]}..."
             )
 
             # 5. Execute
@@ -192,32 +214,27 @@ def main():
     cycle = 0
 
     while True:
-        # 1. Fetch config — if None, backend is down
         cfg = fetch_config()
 
         if cfg is None:
             time.sleep(30)
             continue
 
-        # 2. Check if user enabled the agent
         if not cfg.get("enabled", False):
             log.push_log("[PacificaPilot] Agent disabled by user — sleeping 30s...")
             time.sleep(30)
             continue
 
-        # 3. Validate wallet address exists
         if not cfg.get("walletAddress"):
             log.push_log("[PacificaPilot] No walletAddress in config — complete onboarding first. Sleeping 60s...")
             time.sleep(60)
             continue
 
-        # 4. Validate symbols
         if not cfg.get("symbols"):
             log.push_log("[PacificaPilot] No symbols configured — sleeping 30s...")
             time.sleep(30)
             continue
 
-        # 5. Run the cycle
         run_cycle(cfg, cycle)
         cycle += 1
 
