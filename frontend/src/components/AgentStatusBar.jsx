@@ -46,7 +46,7 @@ export default function AgentStatusBar() {
   const statusText = !enabled ? "OFFLINE" : isRunning ? "ACTIVE" : "STANDBY";
 
   return (
-    <div className="flex items-center justify-between px-8 py-3 border-b border-[#1a2b3b] bg-gradient-to-r from-[#00d1ff05] to-transparent font-mono text-[10px] uppercase tracking-wider">
+    <div className="flex items-center justify-between px-8 py-3 border-b border-[#1a2b3b] bg-gradient-to-r from-[#00d1ff05] to-transparent font-mono text-sm uppercase tracking-wider">
       <div className="flex items-center gap-6">
         {/* Status Indicator */}
         <div className="flex items-center gap-3 px-4 py-2 bg-zinc-950/50 border border-zinc-900 rounded-sm">
@@ -62,7 +62,7 @@ export default function AgentStatusBar() {
         {/* Last Symbol */}
         {isRunning && status?.lastSymbol && (
           <div className="flex items-center gap-2 text-zinc-500">
-            <span className="text-[9px] uppercase tracking-widest">Monitoring:</span>
+            <span className="text-xs uppercase tracking-widest">Monitoring:</span>
             <span style={{ color: PACIFICA_BLUE }} className="font-black">{status.lastSymbol}</span>
           </div>
         )}
@@ -70,7 +70,7 @@ export default function AgentStatusBar() {
         {/* Cycle Counter */}
         {isRunning && (
           <div className="flex items-center gap-2 text-zinc-600 border-l border-zinc-800 pl-5">
-            <span className="text-[9px] uppercase tracking-widest">Cycles:</span>
+            <span className="text-xs uppercase tracking-widest">Cycles:</span>
             <span className="text-zinc-400 font-mono">{status?.cyclesCompleted || 0}</span>
           </div>
         )}
@@ -78,7 +78,7 @@ export default function AgentStatusBar() {
         {/* Last Activity */}
         {status?.lastCycleAt && (
           <div className="flex items-center gap-2 text-zinc-600 border-l border-zinc-800 pl-5">
-            <span className="text-[9px] uppercase tracking-widest">Last_Active:</span>
+            <span className="text-xs uppercase tracking-widest">Last_Active:</span>
             <span className="text-zinc-400 font-mono">{new Date(status.lastCycleAt).toLocaleTimeString()}</span>
           </div>
         )}
@@ -97,7 +97,17 @@ export default function AgentStatusBar() {
         )}
 
         {/* Toggle Control */}
-        
+        <button
+          onClick={toggle}
+          disabled={toggling}
+          className={`px-4 py-2 text-xs font-black uppercase tracking-widest transition-all border cursor-pointer ${
+            enabled
+              ? "bg-red-500/10 border-red-500/50 text-red-500 hover:bg-red-500/20 hover:shadow-[0_0_15px_rgba(239,68,68,0.3)]"
+              : "bg-[#00d1ff] border-[#00d1ff] text-black hover:bg-[#00d1ffcc]"
+          } ${toggling ? "opacity-50 cursor-not-allowed" : ""}`}
+        >
+          {toggling ? "STOPPING..." : enabled ? "STOP AGENT" : "START AGENT"}
+        </button>
       </div>
     </div>
   );

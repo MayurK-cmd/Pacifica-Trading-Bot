@@ -67,7 +67,7 @@ export default function PortfolioTab() {
       </div>
       <button
         onClick={load}
-        className="cursor-pointer text-[9px] bg-[#00d1ff] text-black px-6 py-2 font-black uppercase tracking-widest hover:bg-[#00d1ffcc] transition-all"
+        className="cursor-pointer text-xs bg-[#00d1ff] text-black px-6 py-2 font-black uppercase tracking-widest hover:bg-[#00d1ffcc] transition-all"
       >
         Retry
       </button>
@@ -190,14 +190,14 @@ export default function PortfolioTab() {
         <h2 className="text-white text-3xl font-black uppercase tracking-tighter italic">Portfolio_Overview</h2>
         <div className="flex items-center gap-4">
           {lastUpdated && (
-            <span className="text-[8px] text-zinc-500 font-mono uppercase tracking-widest">
+            <span className="text-sm text-zinc-500 font-mono uppercase tracking-widest">
               Last: {lastUpdated.toLocaleTimeString()}
             </span>
           )}
           <button
             onClick={load}
             disabled={loading}
-            className={`cursor-pointer text-[9px] bg-[#00d1ff] text-black px-4 py-2 font-black uppercase tracking-widest hover:bg-[#00d1ffcc] transition-all active:scale-95 flex items-center gap-2 ${
+            className={`cursor-pointer text-xs bg-[#00d1ff] text-black px-4 py-2 font-black uppercase tracking-widest hover:bg-[#00d1ffcc] transition-all active:scale-95 flex items-center gap-2 ${
               loading ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >
@@ -234,7 +234,7 @@ export default function PortfolioTab() {
           value={`${takerFee}% / ${makerFee}%`}
           icon="◈"
           extra={
-            <a href="https://test-app.pacifica.fi/fee-schedule" target="_blank" rel="noreferrer" className="text-[8px] text-[#00d1ff] hover:underline uppercase">
+            <a href="https://test-app.pacifica.fi/fee-schedule" target="_blank" rel="noreferrer" className="text-sm text-[#00d1ff] hover:underline uppercase">
               View_Fee_Schedule
             </a>
           }
@@ -259,7 +259,7 @@ export default function PortfolioTab() {
             <div className="flex gap-4 items-center">
               <button
                 onClick={() => setChartView("equity")}
-                className={`text-[9px] font-black uppercase tracking-widest pb-1 transition-all ${
+                className={`text-xs font-black uppercase tracking-widest pb-1 transition-all ${
                   chartView === "equity"
                     ? "text-[#00d1ff] border-b border-[#00d1ff]"
                     : "text-zinc-600 hover:text-zinc-400"
@@ -269,7 +269,7 @@ export default function PortfolioTab() {
               </button>
               <button
                 onClick={() => setChartView("pnl")}
-                className={`text-[9px] font-black uppercase tracking-widest pb-1 transition-all ${
+                className={`text-xs font-black uppercase tracking-widest pb-1 transition-all ${
                   chartView === "pnl"
                     ? "text-[#00d1ff] border-b border-[#00d1ff]"
                     : "text-zinc-600 hover:text-zinc-400"
@@ -278,13 +278,13 @@ export default function PortfolioTab() {
                 PnL
               </button>
               {lastUpdated && (
-                <span className="text-[8px] text-zinc-600 font-mono uppercase tracking-widest ml-4">
+                <span className="text-sm text-zinc-600 font-mono uppercase tracking-widest ml-4">
                   Updated: {lastUpdated.toLocaleTimeString()}
                 </span>
               )}
             </div>
             <select
-              className="bg-zinc-900 border border-zinc-800 text-zinc-400 text-[9px] font-mono uppercase px-3 py-1 outline-none focus:border-[#00d1ff]"
+              className="bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs font-mono uppercase px-3 py-1 outline-none focus:border-[#00d1ff]"
               value={timeRange}
               onChange={(e) => setTimeRange(e.target.value)}
             >
@@ -322,7 +322,7 @@ export default function PortfolioTab() {
                   />
                 </svg>
               ) : (
-                <div className="flex items-center justify-center h-full text-zinc-600 text-[9px] uppercase tracking-widest">
+                <div className="flex items-center justify-center h-full text-zinc-600 text-xs uppercase tracking-widest">
                   No_Equity_History_Available
                 </div>
               )
@@ -364,7 +364,7 @@ export default function PortfolioTab() {
                   />
                 </svg>
               ) : (
-                <div className="flex items-center justify-center h-full text-zinc-600 text-[9px] uppercase tracking-widest">
+                <div className="flex items-center justify-center h-full text-zinc-600 text-xs uppercase tracking-widest">
                   No_PnL_History_Available
                 </div>
               )
@@ -374,15 +374,15 @@ export default function PortfolioTab() {
             {chartView === "equity" ? (
               chartData && (
                 <>
-                  <div className="absolute left-2 top-2 text-[8px] text-zinc-600 font-mono">${chartData.max.toFixed(2)}</div>
-                  <div className="absolute left-2 bottom-2 text-[8px] text-zinc-600 font-mono">${chartData.min.toFixed(2)}</div>
+                  <div className="absolute left-2 top-2 text-sm text-zinc-600 font-mono">${chartData.max.toFixed(2)}</div>
+                  <div className="absolute left-2 bottom-2 text-sm text-zinc-600 font-mono">${chartData.min.toFixed(2)}</div>
                 </>
               )
             ) : (
               pnlChartData && (
                 <>
-                  <div className="absolute left-2 top-2 text-[8px] text-zinc-600 font-mono">+${pnlChartData.max.toFixed(2)}</div>
-                  <div className="absolute left-2 bottom-2 text-[8px] text-zinc-600 font-mono">-${Math.abs(pnlChartData.min).toFixed(2)}</div>
+                  <div className="absolute left-2 top-2 text-sm text-zinc-600 font-mono">+${pnlChartData.max.toFixed(2)}</div>
+                  <div className="absolute left-2 bottom-2 text-sm text-zinc-600 font-mono">-${Math.abs(pnlChartData.min).toFixed(2)}</div>
                 </>
               )
             )}
@@ -390,10 +390,10 @@ export default function PortfolioTab() {
             {/* X-axis labels */}
             {(chartData || pnlChartData) && equityHistory.length > 0 && (
               <>
-                <div className="absolute bottom-1 left-2 text-[8px] text-zinc-600 font-mono">
+                <div className="absolute bottom-1 left-2 text-sm text-zinc-600 font-mono">
                   {new Date(equityHistory[0].timestamp).toLocaleDateString()}
                 </div>
-                <div className="absolute bottom-1 right-2 text-[8px] text-zinc-600 font-mono">
+                <div className="absolute bottom-1 right-2 text-sm text-zinc-600 font-mono">
                   {new Date(equityHistory[equityHistory.length - 1].timestamp).toLocaleDateString()}
                 </div>
               </>
@@ -419,7 +419,7 @@ export default function PortfolioTab() {
               <button
                 key={tab.id}
                 onClick={() => setSubTab(tab.id)}
-                className={`cursor-pointer px-4 py-2 text-[8px] font-black uppercase tracking-widest transition-all rounded-md ${
+                className={`cursor-pointer px-4 py-2 text-sm font-black uppercase tracking-widest transition-all rounded-md ${
                   subTab === tab.id
                     ? "text-black bg-[#00d1ff] shadow-[0_0_15px_rgba(0,209,255,0.3)]"
                     : "text-zinc-600 hover:text-zinc-300 hover:bg-zinc-900"
@@ -431,7 +431,7 @@ export default function PortfolioTab() {
           </div>
 
           {subTab === "balance" && (
-            <button className="cursor-pointer text-[9px] bg-[#00d1ff] text-black px-6 py-2 font-black uppercase tracking-widest hover:bg-[#00d1ffcc] hover:shadow-[0_0_20px_rgba(0,209,255,0.4)] transition-all active:scale-95">
+            <button className="cursor-pointer text-xs bg-[#00d1ff] text-black px-6 py-2 font-black uppercase tracking-widest hover:bg-[#00d1ffcc] hover:shadow-[0_0_20px_rgba(0,209,255,0.4)] transition-all active:scale-95">
               Deposit
             </button>
           )}
@@ -443,11 +443,11 @@ export default function PortfolioTab() {
             <table className="w-full text-left font-mono text-[11px]">
               <thead className="bg-zinc-950 text-zinc-500 uppercase">
                 <tr>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Token</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Balance</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Available_To_Withdraw</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Type</th>
-                  <th className="p-4 font-black tracking-widest text-[9px]">Action</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Token</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Balance</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Available_To_Withdraw</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Type</th>
+                  <th className="p-4 font-black tracking-widest text-xs">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-900/50">
@@ -461,7 +461,7 @@ export default function PortfolioTab() {
                         href="https://test-app.pacifica.fi/trade/USDC"
                         target="_blank"
                         rel="noreferrer"
-                        className="text-[8px] text-[#00d1ff] hover:underline uppercase tracking-widest"
+                        className="text-sm text-[#00d1ff] hover:underline uppercase tracking-widest"
                       >
                         Trade
                       </a>
@@ -469,27 +469,27 @@ export default function PortfolioTab() {
                   </td>
                   <td className="p-4 border-r border-zinc-900 text-zinc-300 font-bold">
                     ${(portfolio.usdcBalance || 0).toFixed(2)}
-                    <div className="text-[9px] text-zinc-600 mt-0.5">Avail to spend: ${(portfolio.availableToSpend || 0).toFixed(2)}</div>
+                    <div className="text-xs text-zinc-600 mt-0.5">Avail to spend: ${(portfolio.availableToSpend || 0).toFixed(2)}</div>
                   </td>
                   <td className="p-4 border-r border-zinc-900 text-zinc-300">
                     ${(portfolio.availableToWithdraw || 0).toFixed(2)}
                     {portfolio.pendingBalance > 0 && (
-                      <div className="text-[9px] text-yellow-600 mt-0.5">Pending: ${(portfolio.pendingBalance || 0).toFixed(2)}</div>
+                      <div className="text-xs text-yellow-600 mt-0.5">Pending: ${(portfolio.pendingBalance || 0).toFixed(2)}</div>
                     )}
                   </td>
-                  <td className="p-4 border-r border-zinc-900 text-zinc-500 text-[9px] uppercase tracking-widest">Cash</td>
+                  <td className="p-4 border-r border-zinc-900 text-zinc-500 text-xs uppercase tracking-widest">Cash</td>
                   <td className="p-4">
                     <div className="flex gap-2">
                       <a
                         href="https://test-app.pacifica.fi/trade/USDC"
                         target="_blank"
                         rel="noreferrer"
-                        className="text-[8px] text-[#00d1ff] hover:text-white uppercase font-black tracking-widest"
+                        className="text-sm text-[#00d1ff] hover:text-white uppercase font-black tracking-widest"
                       >
                         Trade
                       </a>
-                      <button className="text-[8px] text-[#00d1ff] hover:text-white uppercase font-black tracking-widest">Deposit</button>
-                      <button className="text-[8px] text-[#00d1ff] hover:text-white uppercase font-black tracking-widest">Withdraw</button>
+                      <button className="text-sm text-[#00d1ff] hover:text-white uppercase font-black tracking-widest">Deposit</button>
+                      <button className="text-sm text-[#00d1ff] hover:text-white uppercase font-black tracking-widest">Withdraw</button>
                     </div>
                   </td>
                 </motion.tr>
@@ -510,7 +510,7 @@ export default function PortfolioTab() {
                           href={`https://test-app.pacifica.fi/trade/${b.symbol}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-[8px] text-[#00d1ff] hover:underline uppercase tracking-widest"
+                          className="text-sm text-[#00d1ff] hover:underline uppercase tracking-widest"
                         >
                           Trade
                         </a>
@@ -522,18 +522,18 @@ export default function PortfolioTab() {
                     <td className="p-4 border-r border-zinc-900 text-zinc-300">
                       {b.availableToWithdraw % 1 === 0 ? b.availableToWithdraw.toFixed(2) : b.availableToWithdraw.toFixed(6)}
                     </td>
-                    <td className="p-4 border-r border-zinc-900 text-zinc-500 text-[9px] uppercase tracking-widest">Spot</td>
+                    <td className="p-4 border-r border-zinc-900 text-zinc-500 text-xs uppercase tracking-widest">Spot</td>
                     <td className="p-4">
                       <div className="flex gap-2">
                         <a
                           href={`https://test-app.pacifica.fi/trade/${b.symbol}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-[8px] text-[#00d1ff] hover:text-white uppercase font-black tracking-widest"
+                          className="text-sm text-[#00d1ff] hover:text-white uppercase font-black tracking-widest"
                         >
                           Trade
                         </a>
-                        <button className="text-[8px] text-[#00d1ff] hover:text-white uppercase font-black tracking-widest">Withdraw</button>
+                        <button className="text-sm text-[#00d1ff] hover:text-white uppercase font-black tracking-widest">Withdraw</button>
                       </div>
                     </td>
                   </motion.tr>
@@ -546,13 +546,13 @@ export default function PortfolioTab() {
             <table className="w-full text-left font-mono text-[11px]">
               <thead className="bg-zinc-950 text-zinc-500 uppercase">
                 <tr>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Asset</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Side</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Size</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Entry_Price</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Mark_Price</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Unreal_PnL</th>
-                  <th className="p-4 font-black tracking-widest text-[9px]">Margin</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Asset</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Side</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Size</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Entry_Price</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Mark_Price</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Unreal_PnL</th>
+                  <th className="p-4 font-black tracking-widest text-xs">Margin</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-900/50">
@@ -568,7 +568,7 @@ export default function PortfolioTab() {
                         <CryptoIcon symbol={p.symbol} />
                         {p.symbol}
                       </td>
-                      <td className={`p-4 border-r border-zinc-900 font-black text-[9px] tracking-widest ${p.side === 'LONG' ? 'text-green-500' : 'text-red-500'}`}>
+                      <td className={`p-4 border-r border-zinc-900 font-black text-xs tracking-widest ${p.side === 'LONG' ? 'text-green-500' : 'text-red-500'}`}>
                         {p.side}
                       </td>
                       <td className="p-4 border-r border-zinc-900 text-zinc-300">{p.size?.toFixed(4)}</td>
@@ -598,13 +598,13 @@ export default function PortfolioTab() {
             <table className="w-full text-left font-mono text-[11px]">
               <thead className="bg-zinc-950 text-zinc-500 uppercase">
                 <tr>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Asset</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Type</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Side</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Size</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Price</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Status</th>
-                  <th className="p-4 font-black tracking-widest text-[9px]">Time</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Asset</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Type</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Side</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Size</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Price</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Status</th>
+                  <th className="p-4 font-black tracking-widest text-xs">Time</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-900/50">
@@ -620,14 +620,14 @@ export default function PortfolioTab() {
                         <CryptoIcon symbol={o.symbol} />
                         {o.symbol}
                       </td>
-                      <td className="p-4 border-r border-zinc-900 text-zinc-500 uppercase text-[9px]">{o.type}</td>
-                      <td className={`p-4 border-r border-zinc-900 font-black text-[9px] tracking-widest ${o.side === 'LONG' ? 'text-green-500' : 'text-red-500'}`}>
+                      <td className="p-4 border-r border-zinc-900 text-zinc-500 uppercase text-xs">{o.type}</td>
+                      <td className={`p-4 border-r border-zinc-900 font-black text-xs tracking-widest ${o.side === 'LONG' ? 'text-green-500' : 'text-red-500'}`}>
                         {o.side}
                       </td>
                       <td className="p-4 border-r border-zinc-900 text-zinc-300">{o.size}</td>
                       <td className="p-4 border-r border-zinc-900 text-zinc-300">${o.price}</td>
                       <td className="p-4 border-r border-zinc-900">
-                        <span className={`px-2 py-0.5 text-[8px] font-black uppercase tracking-widest ${
+                        <span className={`px-2 py-0.5 text-sm font-black uppercase tracking-widest ${
                           o.status === 'Open' ? 'text-yellow-500 bg-yellow-500/10' : 'text-zinc-500 bg-zinc-500/10'
                         }`}>{o.status}</span>
                       </td>
@@ -652,13 +652,13 @@ export default function PortfolioTab() {
             <table className="w-full text-left font-mono text-[11px]">
               <thead className="bg-zinc-950 text-zinc-500 uppercase">
                 <tr>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Asset</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Side</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Fill_Size</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Fill_Price</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Fee</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Realized_PnL</th>
-                  <th className="p-4 font-black tracking-widest text-[9px]">Date</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Asset</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Side</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Fill_Size</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Fill_Price</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Fee</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Realized_PnL</th>
+                  <th className="p-4 font-black tracking-widest text-xs">Date</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-900/50">
@@ -674,7 +674,7 @@ export default function PortfolioTab() {
                         <CryptoIcon symbol={h.symbol} />
                         {h.symbol}
                       </td>
-                      <td className={`p-4 border-r border-zinc-900 font-black text-[9px] tracking-widest ${h.side === 'LONG' ? 'text-green-500' : 'text-red-500'}`}>
+                      <td className={`p-4 border-r border-zinc-900 font-black text-xs tracking-widest ${h.side === 'LONG' ? 'text-green-500' : 'text-red-500'}`}>
                         {h.side}
                       </td>
                       <td className="p-4 border-r border-zinc-900 text-zinc-300">{h.size}</td>
@@ -704,14 +704,14 @@ export default function PortfolioTab() {
             <table className="w-full text-left font-mono text-[11px]">
               <thead className="bg-zinc-950 text-zinc-500 uppercase">
                 <tr>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Asset</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Event</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Side</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Size</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Exec_Price</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Fee</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">PnL</th>
-                  <th className="p-4 font-black tracking-widest text-[9px]">Time</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Asset</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Event</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Side</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Size</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Exec_Price</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Fee</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">PnL</th>
+                  <th className="p-4 font-black tracking-widest text-xs">Time</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-900/50">
@@ -729,10 +729,10 @@ export default function PortfolioTab() {
                           {h.symbol}
                         </div>
                       </td>
-                      <td className="p-4 border-r border-zinc-900 text-zinc-500 text-[9px] uppercase tracking-widest">
+                      <td className="p-4 border-r border-zinc-900 text-zinc-500 text-xs uppercase tracking-widest">
                         {(h.eventType || "").replace("fulfill_", "")}
                       </td>
-                      <td className="p-4 border-r border-zinc-900 text-zinc-300 text-[9px] uppercase">{h.side}</td>
+                      <td className="p-4 border-r border-zinc-900 text-zinc-300 text-xs uppercase">{h.side}</td>
                       <td className="p-4 border-r border-zinc-900 text-zinc-300">{h.size?.toFixed(4)}</td>
                       <td className="p-4 border-r border-zinc-900 text-zinc-300">${h.execPrice?.toFixed(4)}</td>
                       <td className="p-4 border-r border-zinc-900 text-red-400">-${h.fee?.toFixed(4)}</td>
@@ -760,11 +760,11 @@ export default function PortfolioTab() {
             <table className="w-full text-left font-mono text-[11px]">
               <thead className="bg-zinc-950 text-zinc-500 uppercase">
                 <tr>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Asset</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Rate</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Payment</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Balance</th>
-                  <th className="p-4 font-black tracking-widest text-[9px]">Time</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Asset</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Rate</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Payment</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Balance</th>
+                  <th className="p-4 font-black tracking-widest text-xs">Time</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-900/50">
@@ -804,7 +804,7 @@ export default function PortfolioTab() {
               <div className="flex flex-col items-center gap-3">
                 <div className="text-zinc-800 text-4xl">∅</div>
                 <div className="text-zinc-700 uppercase font-mono tracking-[0.3em] text-[10px]">No_Deposits_Withdrawals</div>
-                <p className="text-zinc-600 text-[9px] uppercase font-mono tracking-widest mt-2">
+                <p className="text-zinc-600 text-xs uppercase font-mono tracking-widest mt-2">
                   Deposit/withdrawal history requires a separate Pacifica API endpoint
                 </p>
               </div>
@@ -815,11 +815,11 @@ export default function PortfolioTab() {
             <table className="w-full text-left font-mono text-[11px]">
               <thead className="bg-zinc-950 text-zinc-500 uppercase">
                 <tr>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Asset</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Amount</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">To</th>
-                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-[9px]">Status</th>
-                  <th className="p-4 font-black tracking-widest text-[9px]">Time</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Asset</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Amount</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">To</th>
+                  <th className="p-4 border-r border-zinc-900 font-black tracking-widest text-xs">Status</th>
+                  <th className="p-4 font-black tracking-widest text-xs">Time</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-900/50">
@@ -849,7 +849,7 @@ function CryptoIcon({ symbol, size = "6" }) {
     <div className={`w-${size} h-${size} rounded-full bg-zinc-900 border border-zinc-800 p-1 flex items-center justify-center`}>
       {!loaded && !error && <div className={`w-full h-full bg-zinc-800 rounded-full animate-pulse`} />}
       {error ? (
-        <span className="text-white font-black text-[8px]">{symbol[0]}</span>
+        <span className="text-white font-black text-sm">{symbol[0]}</span>
       ) : (
         <img
           src={src}
@@ -870,7 +870,7 @@ function StatCard({ label, value, color = "#fff", icon = "◈", extra }) {
   return (
     <div className="bg-zinc-950 p-6 border border-zinc-900 hover:border-[#00d1ff]/50 hover:shadow-[0_0_20px_rgba(0,209,255,0.1)] transition-all cursor-default group relative overflow-hidden">
       <div className="flex justify-between items-start mb-2">
-        <span className="text-[8px] text-zinc-600 uppercase tracking-[0.2em] font-mono group-hover:text-[#00d1ff] transition-colors">
+        <span className="text-sm text-zinc-600 uppercase tracking-[0.2em] font-mono group-hover:text-[#00d1ff] transition-colors">
           {label}
         </span>
         {extra}
@@ -887,7 +887,7 @@ function StatCard({ label, value, color = "#fff", icon = "◈", extra }) {
 function StatRow({ label, value, valueColor = "#fff" }) {
   return (
     <div className="flex justify-between items-center">
-      <span className="text-[9px] text-zinc-500 uppercase tracking-widest">{label}</span>
+      <span className="text-xs text-zinc-500 uppercase tracking-widest">{label}</span>
       <span className="text-[10px] font-bold text-white" style={{ color: valueColor }}>
         {value}
       </span>

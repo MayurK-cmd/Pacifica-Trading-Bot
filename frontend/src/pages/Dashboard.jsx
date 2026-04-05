@@ -97,7 +97,7 @@ export default function Dashboard({ user, onLogout }) {
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`px-8 py-2.5 text-[9px] font-black uppercase tracking-widest transition-all rounded-lg relative overflow-hidden cursor-pointer ${
+              className={`px-8 py-2.5 text-xs font-black uppercase tracking-widest transition-all rounded-lg relative overflow-hidden cursor-pointer ${
                 tab === t
                   ? "text-black shadow-[0_0_25px_rgba(0,209,255,0.4)]"
                   : "text-zinc-600 hover:text-zinc-300"
@@ -119,18 +119,18 @@ export default function Dashboard({ user, onLogout }) {
         <div className="flex items-center gap-8 font-mono text-zinc-500 uppercase tracking-tighter">
           <button
             onClick={() => setShowProtocol(true)}
-            className="text-[9px] hover:text-white border-b border-zinc-800 hover:border-[#00d1ff] pb-0.5 transition-all cursor-pointer"
+            className="text-xs hover:text-white border-b border-zinc-800 hover:border-[#00d1ff] pb-0.5 transition-all cursor-pointer"
           >
             System_Protocol
           </button>
           <div className="flex items-center gap-4 border-l border-[#1a2b3b] pl-8">
             <div className="flex items-center gap-2 cursor-pointer" title="Connected wallet">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_6px_#22c55e]" />
-              <span className="text-[9px]">{display}</span>
+              <span className="text-xs">{display}</span>
             </div>
             <button
               onClick={onLogout}
-              className="text-[9px] text-red-500 font-black hover:text-red-400 hover:shadow-[0_0_15px_rgba(239,68,68,0.3)] transition-all px-3 py-1 border border-transparent hover:border-red-500/30 rounded cursor-pointer"
+              className="text-xs text-red-500 font-black hover:text-red-400 hover:shadow-[0_0_15px_rgba(239,68,68,0.3)] transition-all px-3 py-1 border border-transparent hover:border-red-500/30 rounded cursor-pointer"
             >
               EXIT
             </button>
@@ -142,7 +142,7 @@ export default function Dashboard({ user, onLogout }) {
       <AgentStatusBar />
 
       {/* Live Ticker Tape */}
-      <div className="bg-black border-b border-[#1a2b3b] py-2 overflow-hidden flex font-mono text-[9px] uppercase tracking-wider relative">
+      <div className="bg-black border-b border-[#1a2b3b] py-2 overflow-hidden flex font-mono text-xs uppercase tracking-wider relative">
         <div className="px-4 border-r border-[#1a2b3b] text-zinc-600 flex items-center gap-2 font-black select-none z-10 bg-black sticky left-0">
           <span className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_6px_#22c55e]" />
@@ -185,7 +185,7 @@ export default function Dashboard({ user, onLogout }) {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-[#1a2b3b] bg-gradient-to-r from-black via-[#050a12] to-black px-8 py-4 flex justify-between items-center text-[9px] font-mono uppercase tracking-[0.25em] text-zinc-600 fixed bottom-0 left-0 right-0 z-40 backdrop-blur-sm">
+      <footer className="border-t border-[#1a2b3b] bg-gradient-to-r from-black via-[#050a12] to-black px-8 py-4 flex justify-between items-center text-xs font-mono uppercase tracking-[0.25em] text-zinc-600 fixed bottom-0 left-0 right-0 z-40 backdrop-blur-sm">
         <div className="flex gap-8 items-center">
           <div className="flex items-center gap-2 cursor-pointer hover:text-white transition-colors">
             <motion.span
@@ -238,7 +238,7 @@ export default function Dashboard({ user, onLogout }) {
                 </div>
                 <button
                   onClick={() => setShowProtocol(false)}
-                  className="px-5 py-2 text-[9px] font-black uppercase hover:invert transition-all border border-zinc-800 hover:border-[#00d1ff] cursor-pointer"
+                  className="px-5 py-2 text-xs font-black uppercase hover:invert transition-all border border-zinc-800 hover:border-[#00d1ff] cursor-pointer"
                   style={{ backgroundColor: PACIFICA_BLUE, color: '#000' }}
                 >
                   Close [ESC]
@@ -251,7 +251,7 @@ export default function Dashboard({ user, onLogout }) {
                 {/* Architecture Diagram */}
                 <section className="space-y-6">
                   <div className="flex items-center gap-4">
-                    <h3 className="text-zinc-500 text-[9px] font-bold uppercase tracking-[0.4em] italic">// System_Architecture</h3>
+                    <h3 className="text-zinc-500 text-xs font-bold uppercase tracking-[0.4em] italic">// System_Architecture</h3>
                     <div className="h-px flex-1 bg-zinc-900" />
                   </div>
                   <div className="flex justify-center bg-zinc-950/50 border border-[#1a2b3b] p-8 rounded-xl">
@@ -284,7 +284,7 @@ export default function Dashboard({ user, onLogout }) {
                 {/* Tech Stack */}
                 <section className="space-y-6">
                   <div className="flex items-center gap-4">
-                    <h3 className="text-zinc-500 text-[9px] font-bold uppercase tracking-[0.4em] italic">// Technology_Stack</h3>
+                    <h3 className="text-zinc-500 text-xs font-bold uppercase tracking-[0.4em] italic">// Technology_Stack</h3>
                     <div className="h-px flex-1 bg-zinc-900" />
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -300,7 +300,7 @@ export default function Dashboard({ user, onLogout }) {
                     ].map((item, i) => (
                       <div key={i} className="p-5 border border-zinc-900 bg-zinc-950/30 hover:border-[#00d1ff] transition-all cursor-pointer group">
                         <span className="text-2xl block mb-2">{item.icon}</span>
-                        <span className="text-[8px] text-zinc-600 uppercase tracking-widest block mb-1">{item.name}</span>
+                        <span className="text-sm text-zinc-600 uppercase tracking-widest block mb-1">{item.name}</span>
                         <span className="text-white font-bold text-[10px] group-hover:text-[#00d1ff] transition-colors">{item.tech}</span>
                       </div>
                     ))}
@@ -310,7 +310,7 @@ export default function Dashboard({ user, onLogout }) {
                 {/* Security & Encryption */}
                 <section className="space-y-6">
                   <div className="flex items-center gap-4">
-                    <h3 className="text-zinc-500 text-[9px] font-bold uppercase tracking-[0.4em] italic">// Security_Protocol</h3>
+                    <h3 className="text-zinc-500 text-xs font-bold uppercase tracking-[0.4em] italic">// Security_Protocol</h3>
                     <div className="h-px flex-1 bg-zinc-900" />
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -319,7 +319,7 @@ export default function Dashboard({ user, onLogout }) {
                         <span className="text-green-500 text-lg">🔐</span>
                         <h4 className="text-white font-black text-[10px] uppercase tracking-widest">AES-256 Encryption</h4>
                       </div>
-                      <p className="text-zinc-400 text-[9px] leading-relaxed uppercase tracking-tight">
+                      <p className="text-zinc-400 text-xs leading-relaxed uppercase tracking-tight">
                         All sensitive data (private keys, API keys) encrypted before MongoDB storage. Decryption happens only in runtime memory.
                       </p>
                     </div>
@@ -328,7 +328,7 @@ export default function Dashboard({ user, onLogout }) {
                         <span className="text-[#00d1ff] text-lg">🔑</span>
                         <h4 className="text-white font-black text-[10px] uppercase tracking-widest">Ed25519 Signing</h4>
                       </div>
-                      <p className="text-zinc-400 text-[9px] leading-relaxed uppercase tracking-tight">
+                      <p className="text-zinc-400 text-xs leading-relaxed uppercase tracking-tight">
                         Pacifica orders signed using Solana Ed25519 signatures. Private keys never transmitted to backend.
                       </p>
                     </div>
@@ -338,7 +338,7 @@ export default function Dashboard({ user, onLogout }) {
                 {/* Trading Flow */}
                 <section className="space-y-6">
                   <div className="flex items-center gap-4">
-                    <h3 className="text-zinc-500 text-[9px] font-bold uppercase tracking-[0.4em] italic">// Trading_Flow</h3>
+                    <h3 className="text-zinc-500 text-xs font-bold uppercase tracking-[0.4em] italic">// Trading_Flow</h3>
                     <div className="h-px flex-1 bg-zinc-900" />
                   </div>
                   <div className="space-y-3">
@@ -354,7 +354,7 @@ export default function Dashboard({ user, onLogout }) {
                         <span className="text-[#00d1ff] font-black text-[10px] font-mono">{item.step}</span>
                         <div>
                           <h4 className="text-white font-bold text-[10px] uppercase tracking-widest mb-1">{item.title}</h4>
-                          <p className="text-zinc-500 text-[9px] leading-relaxed uppercase">{item.desc}</p>
+                          <p className="text-zinc-500 text-xs leading-relaxed uppercase">{item.desc}</p>
                         </div>
                       </div>
                     ))}
@@ -376,9 +376,9 @@ function FeatureCard({ icon, title, desc, color }) {
       <div className="absolute top-0 left-0 w-1 h-full opacity-0 group-hover:opacity-100 transition-opacity" style={{ backgroundColor: color }} />
       <div className="flex items-center gap-3 mb-4">
         <span className="text-2xl" style={{ color }}>{icon}</span>
-        <h4 className="text-white font-black mb-6 text-[9px] uppercase tracking-widest border-b border-[#1a2b3b] pb-2">{title}</h4>
+        <h4 className="text-white font-black mb-6 text-xs uppercase tracking-widest border-b border-[#1a2b3b] pb-2">{title}</h4>
       </div>
-      <p className="text-zinc-400 text-[9px] leading-relaxed uppercase tracking-tight">
+      <p className="text-zinc-400 text-xs leading-relaxed uppercase tracking-tight">
         {desc}
       </p>
     </div>

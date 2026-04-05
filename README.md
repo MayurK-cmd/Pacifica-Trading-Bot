@@ -6,6 +6,25 @@ Autonomous AI trading agent for Pacifica perpetual futures markets, with a real-
 
 ---
 
+## 🏆 Pacifica Hackathon Submission
+
+**Eligibility:** This project uses Pacifica API for all trading operations and market data.
+
+### Pacifica API Endpoints Used
+| Endpoint | Purpose |
+|----------|---------|
+| `POST /order/create_market` | Execute LONG/SHORT trades |
+| `GET /api/v1/info/prices` | Real-time mark prices |
+| `GET /api/v1/position` | Fetch open positions |
+| `GET /api/v1/balance` | Account balance & equity |
+| `GET /api/v1/trades` | Trade history |
+| `GET /api/v1/funding` | Funding rate data |
+| `GET /api/v1/orderbook` | Order book depth |
+
+**Authentication:** Ed25519-signed requests using Pacifica API keypair.
+
+---
+
 ## Overview
 
 PacificaPilot is a full-stack autonomous trading system that:
