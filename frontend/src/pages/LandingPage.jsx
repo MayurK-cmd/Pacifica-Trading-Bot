@@ -142,7 +142,7 @@ export default function LandingPage() {
           <span className="inline-block font-mono text-[12px] uppercase tracking-[0.8em] mb-8" style={{ color: PACIFICA_BLUE }}>
             Autonomous_Intelligence_Protocol
           </span>
-          <h1 className="text-8xl md:text-[11rem] font-black tracking-tighter leading-[0.8] mb-16 uppercase italic">
+          <h1 className="text-8xl md:text-[9rem] font-black tracking-tighter leading-[0.8] mb-16 uppercase italic">
             Autonomous <br />Agent <br /><span className="not-italic" style={{ color: PACIFICA_BLUE }}>in action.</span>
           </h1>
           <p className="max-w-2xl text-zinc-400 font-mono text-lg leading-relaxed mb-20 uppercase tracking-tighter">

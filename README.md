@@ -582,6 +582,99 @@ DRY_RUN=false  # Production only!
 
 ---
 
+## Deployment Options
+
+### Option 1: Hybrid (Recommended)
+Frontend + Backend local, Agent on Render (24/7 uptime).
+
+**Render Agent Setup:**
+1. Create account at render.com
+2. New Web Service → Connect GitHub repo
+3. Root Directory: `agent`
+4. Build: `pip install -r requirements.txt`
+5. Start: `python main.py`
+6. Add environment variables:
+
+```env
+BACKEND_URL=https://YOUR_BACKEND.ngrok.io
+AGENT_API_SECRET=<same_as_backend>
+PACIFICA_BASE_URL=https://test-api.pacifica.fi/api/v1
+PACIFICA_PRIVATE_KEY=<wallet_key>
+PACIFICA_AGENT_PRIVATE_KEY=<agent_key>
+PACIFICA_AGENT_API_KEY=<agent_api_key>
+GEMINI_API_KEY=<gemini_key>
+ELFA_API_KEY=<elfa_key>
+DRY_RUN=true
+```
+
+**Expose Backend with ngrok:**
+```bash
+ngrok http 3001
+# Update BACKEND_URL in Render with the ngrok URL
+```
+
+### Option 2: Fully Local
+All three services on your machine (development only).
+
+```bash
+# Terminal 1 - Backend
+cd backend && npm install && npm start
+
+# Terminal 2 - Frontend  
+cd frontend && npm install && npm run dev
+
+# Terminal 3 - Agent
+cd agent && pip install -r requirements.txt && python main.py
+```
+
+---
+
+## Trading Modes
+
+### Risk Profiles
+
+| Profile | Stop Loss | Take Profit | Min Confidence | Description |
+|---------|-----------|-------------|----------------|-------------|
+| Conservative | 2% | 4% | 75% | Lower risk, waits for high-conviction setups |
+| Balanced | 3% | 6% | 60% | Moderate risk, default for most users |
+| Aggressive | 5% | 10% | 45% | Higher risk, takes more frequent trades |
+
+### Simulation Mode (DRY_RUN)
+
+**DRY_RUN=true** (Paper Trading):
+- ✓ Simulates all decisions with real market data
+- ✓ Logs reasoning, signals, and virtual PnL
+- ✓ Safe for strategy testing
+- ✓ No funds at risk
+
+**DRY_RUN=false** (Live Trading):
+- ⚠ Places real orders on Pacifica
+- ⚠ Uses actual wallet funds
+- ⚠ Full execution active
+- ⚠ Real money at risk
+
+**How Simulation Works:**
+1. Agent fetches real market data (RSI, funding, basis, sentiment)
+2. Gemini AI outputs trading decision (LONG/SHORT/HOLD)
+3. If confidence > threshold, logs what it WOULD have traded
+4. Tracks virtual position with trailing stops
+5. Simulates exit at stop-loss/take-profit levels
+
+---
+
+## Agent Strengths
+
+| Strength | Description |
+|----------|-------------|
+| **Parallel Processing** | Thread pool analyzes BTC, ETH, SOL concurrently |
+| **Trailing Stop-Loss** | High-water mark tracking locks in profits |
+| **Balance-Aware Sizing** | Caps orders at 90% of available collateral |
+| **Persistent State** | positions.json survives agent restarts |
+| **Dual Signal Architecture** | Gemini AI + rule-based fallback |
+| **Basis Spread Detection** | Flags Pacifica vs Binance arbitrage (>2%) |
+
+---
+
 ## License
 
 MIT
