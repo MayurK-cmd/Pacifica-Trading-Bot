@@ -10,6 +10,62 @@ Autonomous AI trading agent for Pacifica perpetual futures markets, with a real-
 
 **Eligibility:** This project uses Pacifica API for all trading operations and market data.
 
+---
+
+## 🖥️ Hybrid Architecture
+
+PacificaPilot uses a **hybrid deployment model** for security and flexibility:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    YOUR MACHINE (or VPS)                        │
+│  ┌──────────────────────────────────────────────────────────┐   │
+│  │                    AGENT (Python)                        │   │
+│  │  - Runs 24/7 independently                               │   │
+│  │  - Holds YOUR Pacifica private keys                      │   │
+│  │  - Fetches config from our backend                       │   │
+│  │  - Executes trades on user's behalf                      │   │
+│  │  - Logs decisions + sends heartbeats                     │   │
+│  └──────────────────────────────────────────────────────────┘   │
+│                              │ x-agent-key                       │
+│                              ▼                                   │
+└─────────────────────────────────────────────────────────────────┘
+                              │ HTTPS
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    OUR SERVICES (We Provide)                    │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌────────────────┐  │
+│  │   FRONTEND      │  │    BACKEND      │  │    MongoDB     │  │
+│  │   (Vercel)      │─▶│   (Render)      │─▶│    (Atlas)     │  │
+│  │   React + Vite  │  │   Express API   │  │   User Config  │  │
+│  │   Dashboard UI  │  │   + JWT Auth    │  │   Trade History│  │
+│  └─────────────────┘  └─────────────────┘  └────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 🔒 Why This Split?
+
+**Private keys = Your responsibility. We don't want them. You shouldn't trust anyone with them.**
+
+| We Provide (Hosted) | You Run (Your Control) |
+|---------------------|------------------------|
+| Frontend Dashboard | Agent (Python script) |
+| Backend API | Your Pacifica private keys |
+| MongoDB (configs, trade history) | Your choice: local PC or VPS |
+| Authentication | Full control of funds |
+
+### Our Deployed URLs
+| Service | URL |
+|---------|-----|
+| Frontend | `https://pacificia-trading-bot.vercel.app` |
+| Backend API | `https://pacificia-trading-bot.onrender.com` |
+
+### Why Hybrid?
+- **Security**: Your Pacifica private keys NEVER leave your machine
+- **Trustless**: We can't access your funds even if we wanted to
+- **Flexibility**: Run agent locally (testing) or deploy to Render/VPS (24/7)
+- **Centralized Monitoring**: Single dashboard to track everything
+
 ### Pacifica API Endpoints Used
 | Endpoint | Purpose |
 |----------|---------|
@@ -262,7 +318,78 @@ pacifica-plot/
 
 ---
 
-## Deployment Guide
+## 🚀 Quick Start - For Users
+
+### Connect to Our Hosted Platform + Run Agent Locally
+
+| Step | What You Do | Where |
+|------|-------------|-------|
+| 1 | Visit frontend | `https://pacificia-trading-bot.vercel.app` |
+| 2 | Login | Connect Ethereum wallet (Privy) |
+| 3 | Onboard | Enter Pacifica keys (stored encrypted in our DB) |
+| 4 | Configure | Set symbols, risk params in Config tab |
+| 5 | Run Agent | Clone repo → Setup `agent/.env` → `python main.py` |
+| 6 | Monitor | Watch live trades in dashboard |
+
+> ⚠️ **Your private keys stay in YOUR agent's `.env` — NEVER sent to our backend.**
+
+---
+
+## 📋 Full Deployment Instructions
+
+### For End Users (Connecting to Our Hosted Platform)
+
+**You need:**
+- Pacifica testnet account: [test-app.pacifica.fi](https://test-app.pacifica.fi)
+- Google Gemini API key: [aistudio.google.com](https://aistudio.google.com)
+- (Optional) Elfa AI key: [elfa.ai](https://elfa.ai)
+
+**Steps:**
+
+1. **Clone the repo:**
+   ```bash
+   git clone https://github.com/MayurK-cmd/Pacificia-Trading-Bot.git
+   cd Pacificia-Trading-Bot/agent
+   ```
+
+2. **Install Python deps:**
+   ```bash
+   pip install requests google-genai solders python-dotenv websockets
+   ```
+
+3. **Create `agent/.env`:**
+   ```bash
+   # Backend connection (OUR HOSTED API)
+   BACKEND_URL=https://pacificia-trading-bot.onrender.com
+   AGENT_API_SECRET=<ask_project_owner_for_this>
+
+   # Your Pacifica credentials (STAY ON YOUR MACHINE)
+   PACIFICA_PRIVATE_KEY=<your_base58_private_key>
+   PACIFICA_AGENT_PRIVATE_KEY=<your_agent_wallet_key>
+
+   # AI services
+   GEMINI_API_KEY=<your_gemini_key>
+   ELFA_API_KEY=<your_elfa_key>
+
+   # Safety first!
+   DRY_RUN=true
+   ```
+
+4. **Run the agent:**
+   ```bash
+   python main.py
+   ```
+
+5. **Connect to dashboard:**
+   - Visit `https://pacificia-trading-bot.vercel.app`
+   - Login with Privy
+   - Complete onboarding (enter Pacifica keys)
+   - Configure trading settings
+   - Watch your agent work!
+
+---
+
+### For Developers (Hosting Your Own Platform)
 
 ### Prerequisites
 
@@ -359,6 +486,8 @@ STOP_LOSS_PCT=3.0
 TAKE_PROFIT_PCT=6.0
 USE_BINANCE_KLINE_FALLBACK=true
 ```
+
+> ⚠️ **Note**: `PACIFICA_AGENT_API_KEY` is NOT used by the agent code. Only `PACIFICA_PRIVATE_KEY` and `PACIFICA_AGENT_PRIVATE_KEY` are required.
 
 ---
 
