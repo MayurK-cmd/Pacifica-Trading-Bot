@@ -19,7 +19,7 @@
 |----------|------|
 | **Live Dashboard** | [pacificia-trading-bot.vercel.app](https://pacificia-trading-bot.vercel.app) |
 | **Backend API** | [pacificia-trading-bot.onrender.com](https://pacificia-trading-bot.onrender.com) |
-| **Demo Video** | *(link to video)* |
+| **Demo Video** | [https://youtu.be/LT4O4Zh5wqg](https://youtu.be/LT4O4Zh5wqg) |
 | **Pacifica Testnet** | [test-app.pacifica.fi](https://test-app.pacifica.fi) |
 
 ---
