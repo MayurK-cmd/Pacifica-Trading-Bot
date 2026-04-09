@@ -672,6 +672,7 @@ DRY_RUN=true`}
             <div className="flex flex-col md:flex-row gap-12">
               <span className="cursor-default italic text-zinc-700">© 2026_PILOT_CORE</span>
               <a href="https://github.com/MayurK-cmd/Pacificia-Trading-Bot" target="_blank" rel="noreferrer" className="underline underline-offset-8 decoration-zinc-800 hover:text-white transition-colors font-bold">Github_Source</a>
+              <a href="https://pacifica.gitbook.io/docs/hackathon/pacifica-hackathon" target="_blank" rel="noreferrer" className="underline underline-offset-8 decoration-zinc-800 hover:text-white transition-colors font-bold">Pacifica_Hackathon</a>
               <button className="hover:text-white transition-colors text-zinc-600">Protocol_Status: {systemTime}</button>
             </div>
             <div className="flex gap-10 items-center">
