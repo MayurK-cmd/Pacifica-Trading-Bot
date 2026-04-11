@@ -17,8 +17,6 @@
 
 | Resource | Link |
 |----------|------|
-| **Live Dashboard** | [pacificia-trading-bot.vercel.app](https://pacificia-trading-bot.vercel.app) |
-| **Backend API** | [pacificia-trading-bot.onrender.com](https://pacificia-trading-bot.onrender.com) |
 | **Demo Video** | [https://youtu.be/LT4O4Zh5wqg](https://youtu.be/LT4O4Zh5wqg) |
 | **Pacifica Testnet** | [test-app.pacifica.fi](https://test-app.pacifica.fi) |
 
@@ -71,41 +69,40 @@ PacificaPilot runs a continuous decision loop for each symbol you configure:
 
 ## Architecture
 
-PacificaPilot uses a **hybrid security model**. The dashboard and backend are hosted — but the trading agent always runs on your own machine. Your Pacifica private key is used locally to sign transactions and is never transmitted anywhere.
+PacificaPilot runs **entirely on your local machine** — frontend, backend, and agent all local. Your Pacifica private key is used locally to sign transactions and is never transmitted anywhere.
 
 ```
-┌──────────────────────────────────────────────┐
-│           YOUR MACHINE  (Required)           │
-│                                              │
-│   ┌──────────────────────────────────────┐   │
-│   │           AGENT  (Python)            │   │
-│   │                                      │   │
-│   │  • Runs the trading loop 24/7        │   │
-│   │  • Signs transactions locally        │   │
-│   │  • Private key never transmitted     │   │
-│   └──────────────────┬───────────────────┘   │
-│                      │  HTTPS + x-agent-key  │
-└──────────────────────┼───────────────────────┘
-                       │
-          ┌────────────▼──────────────┐
-          │      BACKEND  (Render)    │
-          │      Express + JWT Auth   │
-          └───────────┬───────────────┘
-               ┌──────┴───────┐
-        ┌──────▼──────┐ ┌─────▼───────┐
-        │  MongoDB    │ │  FRONTEND   │
-        │  (Atlas)    │ │  (Vercel)   │
-        │  Configs +  │ │  Dashboard  │
-        │  Trade Logs │ │  + PnL View │
-        └─────────────┘ └─────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│                   YOUR MACHINE  (All Components)             │
+│                                                              │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │                   AGENT  (Python)                      │  │
+│  │  • Runs the trading loop 24/7                          │  │
+│  │  • Signs transactions locally                          │  │
+│  │  • Private key never transmitted                       │  │
+│  └──────────────────────┬───────────────────────────────  │  │
+│                         │  HTTPS localhost:3001            │  │
+│  ┌──────────────────────▼─────────────────────────────┐   │  │
+│  │           BACKEND  (Express — localhost:3001)       │   │  │
+│  │           Config + Auth + Trade Logs               │   │  │
+│  └──────────────────────┬───────────────────────────── │   │  │
+│                         │  localhost:5173               │  │  │
+│  ┌──────────────────────▼─────────────────────────────┐ │  │  │
+│  │           FRONTEND  (Vite — localhost:5173)         │ │  │  │
+│  │           Dashboard UI + PnL View                  │ │  │  │
+│  └─────────────────────────────────────────────────────┘ │  │  │
+└──────────────────────────────────────────────────────────────┘
+                          │
+                   MongoDB Atlas
+                   (cloud DB only)
 ```
 
-| We Provide (Hosted) | You Run (Your Machine — Required) |
-|---------------------|-----------------------------------|
-| Frontend Dashboard (Vercel) | Agent (Python script) |
-| Backend API (Render) | Your Pacifica private keys |
-| MongoDB (configs, trade history) | Full control of funds |
-| Authentication via Privy | Local `.env` configuration |
+| Component | Where It Runs | Notes |
+|-----------|--------------|-------|
+| Frontend (Vite) | Your machine — localhost:5173 | Dashboard UI |
+| Backend (Express) | Your machine — localhost:3001 | API + Auth |
+| Agent (Python) | Your machine | Trading logic + keys |
+| MongoDB | Atlas (cloud DB) | Config + trade history only |
 
 ---
 
@@ -189,6 +186,8 @@ PacificaPilot uses a **hybrid security model**. The dashboard and backend are ho
 - [Pacifica Testnet account](https://test-app.pacifica.fi) — use code `Pacifica`
 - [Google Gemini API key](https://aistudio.google.com/app/apikey)
 - [Elfa AI API key](https://elfa.ai) *(optional but strongly recommended)*
+- [Privy account](https://privy.io) — free tier works
+- [MongoDB Atlas account](https://mongodb.com/atlas) — free M0 cluster is sufficient
 - Node.js 18+ and Python 3.11+
 
 ### 1. Clone
@@ -253,7 +252,7 @@ cd frontend && npm run dev       # → http://localhost:5173
 cd agent && python main.py
 ```
 
-Open the dashboard, connect your wallet, configure your parameters, and watch the agent trade.
+Open `http://localhost:5173`, connect your wallet, configure your parameters, and watch the agent trade.
 
 ---
 
@@ -458,42 +457,17 @@ pacifica-pilot/
 
 ---
 
-## Deployment
-
-The backend and frontend can be hosted. **The agent must run on your local machine** — this is the security guarantee, not a limitation. Your private key signs all transactions locally and never touches any remote server.
-
-### Backend → Render
-```
-Root Directory: backend
-Build Command:  npm install
-Start Command:  npm start
-```
-
-### Frontend → Vercel
-```
-Root Directory: frontend
-Build Command:  npm run build
-Output Dir:     dist
-```
-`vercel.json` is included in the frontend directory.
-
-### Agent → Your Machine Only
-```bash
-cd agent && python main.py
-```
-
----
-
 ## Troubleshooting
 
 | Issue | Fix |
 |-------|-----|
 | Agent shows Offline | Toggle "Enabled" ON in the Config tab |
-| Agent won't connect | Verify `BACKEND_URL` and `AGENT_API_SECRET` match on both sides |
+| Agent won't connect | Verify `BACKEND_URL=http://localhost:3001` and `AGENT_API_SECRET` match on both sides |
 | No market data | Check Pacifica keys; enable Binance fallback in Config |
 | Login fails | Verify Privy App ID / Secret; check MongoDB connection |
 | PnL not updating | Confirm agent is running and heartbeating; check the Logs tab |
 | Circuit breaker active | Pacifica API degraded; Binance fallback takes over automatically |
+| Frontend can't reach backend | Ensure backend is on `:3001` and `VITE_API_URL=http://localhost:3001` in frontend `.env` |
 
 Enable verbose agent logging:
 ```python

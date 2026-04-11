@@ -26,7 +26,7 @@ export default function DocsPage() {
               <p style={{ color: blue }} className="mb-6 opacity-80 italic font-bold border-b border-zinc-900 pb-2">01_Intro</p>
               <ul className="space-y-4 pl-4 border-l border-zinc-800">
                 <li><a href="#overview" className="hover:text-white transition-colors">Overview</a></li>
-                <li><a href="#hybrid-architecture" className="hover:text-white transition-colors">Hybrid_Architecture</a></li>
+                <li><a href="#hybrid-architecture" className="hover:text-white transition-colors">Architecture</a></li>
                 <li><a href="#agent-strengths" className="hover:text-white transition-colors">Agent_Strengths</a></li>
               </ul>
             </div>
@@ -40,8 +40,8 @@ export default function DocsPage() {
             <div>
               <p style={{ color: blue }} className="mb-6 opacity-80 italic font-bold border-b border-zinc-900 pb-2">03_Deployment</p>
               <ul className="space-y-4 pl-4 border-l border-zinc-800">
-                <li><a href="#option1-hybrid" className="hover:text-white transition-colors">Option 1: Hybrid</a></li>
-                <li><a href="#option2-local" className="hover:text-white transition-colors">Option 2: Full Local</a></li>
+                <li><a href="#option1-hybrid" className="hover:text-white transition-colors">Full Local Setup</a></li>
+                <li><a href="#env-vars" className="hover:text-white transition-colors">Environment_Vars</a></li>
               </ul>
             </div>
             <div>
@@ -84,50 +84,50 @@ export default function DocsPage() {
                   Autonomous AI trading agent for Pacifica perpetual futures with real-time dashboard monitoring.
                 </p>
 
-                {/* Hybrid Architecture */}
+                {/* Architecture */}
                 <div id="hybrid-architecture" className="mt-24 space-y-10">
-                  <h3 style={{ color: blue }} className="text-xl font-bold uppercase tracking-widest italic">Hybrid_Architecture</h3>
+                  <h3 style={{ color: blue }} className="text-xl font-bold uppercase tracking-widest italic">Architecture</h3>
                   <p className="text-zinc-400 text-sm leading-relaxed uppercase tracking-tight">
-                    PacificaPilot uses a hybrid deployment model — your private keys NEVER leave your machine.
+                    PacificaPilot runs entirely on your machine — frontend, backend, and agent all local. Your private keys NEVER leave your environment.
                   </p>
 
                   <div className="p-6 border border-[#00d1ff]/30 bg-[#00d1ff]/5">
-                    <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-4" style={{ color: blue }}>Our Infrastructure</h4>
+                    <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-4" style={{ color: blue }}>Local Architecture</h4>
                     <pre className="text-zinc-400 text-[10px] font-mono leading-5 overflow-x-auto">
 {`┌─────────────────────────────────────────────────────────┐
-│              YOUR MACHINE (or VPS)                      │
+│              YOUR MACHINE (All Components)              │
+│                                                         │
 │  ┌─────────────────────────────────────────────────┐    │
-│  │           AGENT (Python) - Runs 24/7            │    │
+│  │           AGENT (Python) — Trading Logic        │    │
 │  │  • Holds YOUR Pacifica private keys             │    │
-│  │  • Fetches config from our backend              │    │
-│  │  • Executes trades on your behalf               │    │
+│  │  • Fetches config from local backend            │    │
+│  │  • Executes trades on Pacifica                  │    │
 │  │  • Logs decisions + sends heartbeats            │    │
+│  └──────────────────┬──────────────────────────────┘    │
+│                     │ HTTPS localhost                   │
+│  ┌──────────────────▼──────────────────────────────┐    │
+│  │           BACKEND (Express — port 3001)         │    │
+│  │  • Config storage (MongoDB Atlas)               │    │
+│  │  • Trade history + logs                         │    │
+│  │  • Auth via Privy JWT                           │    │
+│  └──────────────────┬──────────────────────────────┘    │
+│                     │ localhost                         │
+│  ┌──────────────────▼──────────────────────────────┐    │
+│  │           FRONTEND (Vite — port 5173)           │    │
+│  │  • Dashboard UI                                 │    │
+│  │  • Real-time logs & positions                   │    │
 │  └─────────────────────────────────────────────────┘    │
-│                          │ x-agent-key                  │
-│                          ▼                              │
-└─────────────────────────────────────────────────────────┘
-                          │ HTTPS
-                          ▼
-┌─────────────────────────────────────────────────────────┐
-│              OUR SERVICES (We Provide)                  │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐      │
-│  │  FRONTEND   │  │   BACKEND   │  │   MongoDB   │      │
-│  │  (Vercel)   │─▶│  (Render)   │─▶│   (Atlas)   │      │
-│  │  Dashboard  │  │  Express    │  │  Config +   │      │
-│  │     UI      │  │    API      │  │   Trades    │      │
-│  └─────────────┘  └─────────────┘  └─────────────┘      │
 └─────────────────────────────────────────────────────────┘`}
                     </pre>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="p-6 border border-zinc-800 bg-zinc-950/30">
-                      <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-4" style={{ color: blue }}>We Provide (Hosted)</h4>
+                      <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-4" style={{ color: blue }}>You Run Locally</h4>
                       <ul className="space-y-3 text-zinc-500 text-[10px] uppercase tracking-tight">
-                        <li className="flex gap-3"><span>•</span> Frontend (Vercel) — Dashboard UI</li>
-                        <li className="flex gap-3"><span>•</span> Backend (Render) — API + Auth</li>
-                        <li className="flex gap-3"><span>•</span> MongoDB (Atlas) — Config storage</li>
-                        <li className="flex gap-3"><span className="text-yellow-500">⚠</span> Encrypted keys (AES-256)</li>
+                        <li className="flex gap-3"><span>•</span> Frontend (Vite) — Dashboard UI on :5173</li>
+                        <li className="flex gap-3"><span>•</span> Backend (Express) — API + Auth on :3001</li>
+                        <li className="flex gap-3"><span>•</span> MongoDB (Atlas) — Cloud DB only</li>
                       </ul>
                     </div>
                     <div className="p-6 border border-[#22c55e]/30 bg-[#22c55e]/5">
@@ -143,45 +143,31 @@ export default function DocsPage() {
 
                   <div className="p-4 border border-[#22c55e]/50 bg-[#22c55e]/5">
                     <p className="text-[10px] uppercase tracking-tight text-[#22c55e]">
-                      <span className="font-bold">Security First:</span> Your Pacifica private keys are NEVER sent to the backend. They stay in your agent's .env file forever.
+                      <span className="font-bold">Security First:</span> Your Pacifica private keys are NEVER sent anywhere. They stay in your agent's .env file forever.
                     </p>
                   </div>
 
                   <div className="p-6 border border-[#00d1ff]/30 bg-[#00d1ff]/5 mt-6">
-                    <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-4" style={{ color: blue }}>🔒 Why This Split?</h4>
+                    <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-4" style={{ color: blue }}>🔒 Why Run Everything Locally?</h4>
                     <p className="text-[10px] uppercase tracking-tight text-zinc-400 mb-4">
-                      Private keys = Your responsibility. We don't want them. You shouldn't trust anyone with them.
+                      Private keys = Your responsibility. No hosted service should ever touch them. Running locally gives you full control over every component.
                     </p>
                     <div className="grid grid-cols-2 gap-4 text-[9px]">
                       <div>
-                        <span className="text-zinc-500 block mb-2">WE PROVIDE:</span>
+                        <span className="text-zinc-500 block mb-2">YOU RUN (LOCAL):</span>
                         <ul className="space-y-1 text-zinc-300">
-                          <li>• Frontend Dashboard</li>
-                          <li>• Backend API</li>
-                          <li>• MongoDB Storage</li>
+                          <li>• Frontend Dashboard (:5173)</li>
+                          <li>• Backend API (:3001)</li>
+                          <li>• Agent (Python)</li>
                         </ul>
                       </div>
                       <div>
-                        <span className="text-zinc-500 block mb-2">YOU RUN:</span>
+                        <span className="text-zinc-500 block mb-2">EXTERNAL ONLY:</span>
                         <ul className="space-y-1 text-zinc-300">
-                          <li>• Agent (Python)</li>
-                          <li>• Your Private Keys</li>
-                          <li>• Full Fund Control</li>
+                          <li>• MongoDB Atlas (DB)</li>
+                          <li>• Gemini / Elfa APIs</li>
+                          <li>• Pacifica DEX</li>
                         </ul>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-6 border border-[#00d1ff]/30 bg-[#00d1ff]/5 mt-6">
-                    <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-4" style={{ color: blue }}>Our Deployed Services</h4>
-                    <div className="space-y-2 text-[10px] uppercase tracking-tight">
-                      <div className="flex justify-between">
-                        <span className="text-zinc-500">Frontend:</span>
-                        <span className="text-zinc-300">pacificia-trading-bot.vercel.app</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-zinc-500">Backend API:</span>
-                        <span className="text-zinc-300">pacificia-trading-bot.onrender.com</span>
                       </div>
                     </div>
                   </div>
@@ -206,19 +192,22 @@ export default function DocsPage() {
                 <div id="for-end-users" className="mt-24 space-y-10">
                   <h3 style={{ color: blue }} className="text-xl font-bold uppercase tracking-widest italic">For_End_Users</h3>
                   <p className="text-zinc-400 text-sm leading-relaxed uppercase tracking-tight">
-                    Want to USE the agent (not host it)? Follow these steps:
+                    Clone the repo and run all three services locally. Follow these steps:
                   </p>
 
                   <div id="onboarding-steps" className="space-y-6">
                     <h4 className="text-white font-bold uppercase tracking-widest text-xs">Quick Start Guide</h4>
                     {[
-                      { step: "1", title: "Visit Frontend", desc: "Go to https://pacificapilot.com (or your deployed URL)" },
-                      { step: "2", title: "Connect Wallet", desc: "Click 'Login' and connect your Ethereum wallet (MetaMask)" },
-                      { step: "3", title: "Get Pacifica Keys", desc: "Create account at test-app.pacifica.fi → Go to /apikey page" },
-                      { step: "4", title: "Complete Onboarding", desc: "Enter Solana wallet address, Agent private key, Agent API key" },
-                      { step: "5", title: "Configure Trading", desc: "Set symbols, position size, stop-loss, take-profit in Config tab" },
-                      { step: "6", title: "Deploy Agent", desc: "Clone repo, copy agent/.env template, add YOUR Pacifica keys, run python main.py" },
-                      { step: "7", title: "Monitor", desc: "Watch trades execute in real-time from the Dashboard" },
+                      { step: "1", title: "Clone Repo", desc: "git clone https://github.com/MayurK-cmd/Pacificia-Trading-Bot.git" },
+                      { step: "2", title: "Get Required Keys", desc: "Gather Pacifica keys, Gemini API key, Elfa key, Privy credentials, and MongoDB URI" },
+                      { step: "3", title: "Configure .env Files", desc: "Fill in backend/.env, frontend/.env, and agent/.env with your credentials" },
+                      { step: "4", title: "Start Backend", desc: "cd backend && npm install && npm start — runs on http://localhost:3001" },
+                      { step: "5", title: "Start Frontend", desc: "cd frontend && npm install && npm run dev — opens at http://localhost:5173" },
+                      { step: "6", title: "Connect Wallet", desc: "Open localhost:5173, click Login and connect your Ethereum wallet (MetaMask)" },
+                      { step: "7", title: "Complete Onboarding", desc: "Enter Solana wallet address, Agent private key, Agent API key" },
+                      { step: "8", title: "Configure Trading", desc: "Set symbols, position size, stop-loss, take-profit in Config tab" },
+                      { step: "9", title: "Run Agent", desc: "cd agent && pip install -r requirements.txt && python main.py" },
+                      { step: "10", title: "Monitor", desc: "Watch trades execute in real-time from the Dashboard" },
                     ].map((item, i) => (
                       <div key={i} className="flex gap-6 items-start p-6 bg-zinc-950/20 border border-zinc-900">
                         <span style={{ color: blue }} className="text-2xl font-black flex-shrink-0">{item.step}</span>
@@ -233,7 +222,7 @@ export default function DocsPage() {
                   <div className="p-6 border border-yellow-900/50 bg-yellow-950/10 mt-8">
                     <h4 className="text-yellow-500 font-bold uppercase tracking-widest text-xs mb-3">⚠ Important Notes</h4>
                     <ul className="space-y-2 text-zinc-500 text-[10px] uppercase tracking-tight">
-                      <li>• Agent runs on YOUR machine — backend doesn't host it for you</li>
+                      <li>• All three services run on YOUR machine — nothing is hosted externally</li>
                       <li>• Private keys NEVER leave your .env file (stored only in memory)</li>
                       <li>• Start with DRY_RUN=true for paper trading first</li>
                       <li>• For 24/7 trading, deploy agent to Render/VPS (not your laptop)</li>
@@ -288,21 +277,21 @@ export default function DocsPage() {
                 <div className="h-px flex-1 bg-zinc-800" />
               </div>
 
-              {/* Option 1 */}
+              {/* Full Local */}
               <div className="space-y-10 mb-24">
-                <h3 id="option1-hybrid" style={{ color: blue }} className="text-2xl font-black uppercase tracking-widest italic border-b border-[#1a2b3b] pb-4">Connect to Our Platform + Run Agent</h3>
+                <h3 id="option1-hybrid" style={{ color: blue }} className="text-2xl font-black uppercase tracking-widest italic border-b border-[#1a2b3b] pb-4">Run Everything Locally</h3>
                 <p className="text-zinc-400 text-sm leading-relaxed uppercase tracking-tight">
-                  Connect to our hosted frontend/backend. Run the agent on your machine (keys stay with you).
+                  Frontend, backend, and agent all run on your machine. Full control. No hosted dependencies.
                 </p>
 
                 <div className="p-6 border border-[#00d1ff]/30 bg-[#00d1ff]/5">
                   <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-4">Architecture</h4>
                   <pre className="text-zinc-400 text-xs font-mono leading-6">
-{`┌─────────────────────┐      ┌──────────────────┐
-│   YOUR AGENT        │      │  OUR PLATFORM    │
-│   (Your PC/VPS)     │─────▶│  Frontend (Vercel)│
-│   python main.py    │      │  Backend (Render) │
-└─────────────────────┘      └──────────────────┘`}
+{`┌─────────────────────┐      ┌──────────────────┐      ┌──────────────────┐
+│   YOUR AGENT        │      │  YOUR BACKEND    │      │  YOUR FRONTEND   │
+│   python main.py    │─────▶│  localhost:3001  │◀─────│  localhost:5173  │
+│   (Trading Logic)   │      │  (Express API)   │      │  (Dashboard UI)  │
+└─────────────────────┘      └──────────────────┘      └──────────────────┘`}
                   </pre>
                 </div>
 
@@ -312,7 +301,8 @@ export default function DocsPage() {
                     { step: "1", text: "Pacifica account: test-app.pacifica.fi (get private key + API key)" },
                     { step: "2", text: "Google Gemini key: aistudio.google.com/apikey" },
                     { step: "3", text: "Elfa AI key (optional): elfa.ai" },
-                    { step: "4", text: "AGENT_API_SECRET: Ask project owner" },
+                    { step: "4", text: "Privy App ID + Secret: privy.io (create a free app)" },
+                    { step: "5", text: "MongoDB URI: mongodb.com/atlas (free M0 cluster)" },
                   ].map((item, i) => (
                     <div key={i} className="flex gap-6 items-center p-6 bg-zinc-950/20 border border-zinc-900">
                       <span style={{ color: blue }} className="text-2xl font-black">{item.step}</span>
@@ -321,23 +311,32 @@ export default function DocsPage() {
                   ))}
                 </div>
 
-                <div className="space-y-4">
-                  <h4 className="text-white font-bold uppercase tracking-widest text-xs">Step 2: Setup Agent (.env)</h4>
+                <div id="env-vars" className="space-y-4">
+                  <h4 className="text-white font-bold uppercase tracking-widest text-xs">Step 2: Setup Environment Files</h4>
                   <pre className="bg-[#050a12] border border-[#1a2b3b] p-8 text-zinc-300 text-sm font-mono leading-7 overflow-x-auto shadow-2xl">
 {`# Clone repo
 git clone https://github.com/MayurK-cmd/Pacificia-Trading-Bot.git
-cd Pacificia-Trading-Bot/agent
+cd Pacificia-Trading-Bot
 
-# Install deps
-pip install requests google-genai solders python-dotenv websockets
+# backend/.env
+MONGODB_URI=mongodb+srv://<user>:<pass>@cluster.mongodb.net/pacifica
+PRIVY_APP_ID=<your_privy_app_id>
+PRIVY_APP_SECRET=<your_privy_app_secret>
+ENCRYPTION_SECRET=<32_char_hex>
+AGENT_API_SECRET=<your_chosen_secret>
 
-# Create .env file
-BACKEND_URL=https://pacificia-trading-bot.onrender.com
-AGENT_API_SECRET=<ask_project_owner>
+# frontend/.env
+VITE_API_URL=http://localhost:3001
+VITE_PRIVY_APP_ID=<your_privy_app_id>
+
+# agent/.env
+BACKEND_URL=http://localhost:3001
+AGENT_API_SECRET=<same_as_backend>
 
 # Your Pacifica keys (NEVER leave your machine!)
 PACIFICA_PRIVATE_KEY=<your_base58_private_key>
 PACIFICA_AGENT_PRIVATE_KEY=<your_agent_wallet_key>
+PACIFICA_AGENT_PUBLIC_KEY=<your_agent_api_key>
 
 # AI services
 GEMINI_API_KEY=<your_gemini_key>
@@ -349,17 +348,25 @@ DRY_RUN=true`}
                 </div>
 
                 <div className="space-y-4">
-                  <h4 className="text-white font-bold uppercase tracking-widest text-xs">Step 3: Run Agent</h4>
+                  <h4 className="text-white font-bold uppercase tracking-widest text-xs">Step 3: Run All Services</h4>
                   <pre className="bg-[#050a12] border border-[#1a2b3b] p-8 text-zinc-300 text-sm font-mono leading-7">
-{`cd agent
-python main.py`}
+{`# Terminal 1 — Backend
+cd backend && npm install && npm start
+# → http://localhost:3001
+
+# Terminal 2 — Frontend
+cd frontend && npm install && npm run dev
+# → http://localhost:5173
+
+# Terminal 3 — Agent
+cd agent && pip install -r requirements.txt && python main.py`}
                   </pre>
                 </div>
 
                 <div className="space-y-4">
                   <h4 className="text-white font-bold uppercase tracking-widest text-xs">Step 4: Connect Dashboard</h4>
                   <pre className="bg-[#050a12] border border-[#1a2b3b] p-8 text-zinc-300 text-sm font-mono leading-7">
-{`1. Visit: https://pacificia-trading-bot.vercel.app
+{`1. Open: http://localhost:5173
 2. Login with Privy (connect Ethereum wallet)
 3. Complete onboarding (enter Pacifica keys)
 4. Configure trading (symbols, risk params)
@@ -369,62 +376,8 @@ python main.py`}
 
                 <div className="p-4 border border-[#22c55e]/50 bg-[#22c55e]/5">
                   <p className="text-[10px] uppercase tracking-tight text-[#22c55e]">
-                    <span className="font-bold">✓ Security:</span> Your private keys stay in YOUR agent's .env — never sent to our backend.
+                    <span className="font-bold">✓ Fully Local:</span> Your private keys stay in YOUR agent's .env — never sent anywhere. Only MongoDB Atlas and external AI APIs are called remotely.
                   </p>
-                </div>
-              </div>
-
-              {/* Option 2 */}
-              <div id="option2-local" className="space-y-10">
-                <h3 style={{ color: blue }} className="text-2xl font-black uppercase tracking-widest italic border-b border-[#1a2b3b] pb-4">Option: Self-Host Everything</h3>
-                <p className="text-zinc-400 text-sm leading-relaxed uppercase tracking-tight">
-                  Run frontend + backend + agent all locally. For development/testing only.
-                </p>
-
-                <div className="p-6 border border-yellow-900/30 bg-yellow-950/5">
-                  <h4 className="text-yellow-500 font-bold uppercase tracking-widest text-xs mb-4">Use Cases</h4>
-                  <ul className="space-y-2 text-zinc-500 text-[10px] uppercase tracking-tight">
-                    <li>• Testing the platform before deploying</li>
-                    <li>• Development/debugging</li>
-                    <li>• Demo without internet</li>
-                  </ul>
-                </div>
-
-                <div className="space-y-6 mt-6">
-                  <h4 className="text-white font-bold uppercase tracking-widest text-xs">Setup Steps</h4>
-                  {[
-                    { step: "1", text: "Backend: cd backend && npm install && npm start" },
-                    { step: "2", text: "Frontend: cd frontend && npm install && npm run dev" },
-                    { step: "3", text: "Agent: cd agent && pip install -r requirements.txt && python main.py" },
-                  ].map((item, i) => (
-                    <div key={i} className="flex gap-6 items-center p-6 bg-zinc-950/20 border border-zinc-900">
-                      <span style={{ color: blue }} className="text-2xl font-black">{item.step}</span>
-                      <p className="text-zinc-400 text-sm uppercase tracking-tight">{item.text}</p>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="space-y-4 mt-6">
-                  <h4 className="text-white font-bold uppercase tracking-widest text-xs">Environment Files</h4>
-                  <pre className="bg-[#050a12] border border-[#1a2b3b] p-6 text-zinc-300 text-xs font-mono leading-6 overflow-x-auto">
-{`# backend/.env
-MONGODB_URI=mongodb+srv://<user>:<pass>@cluster.mongodb.net/pacifica
-PRIVY_APP_ID=<privy_id>
-PRIVY_APP_SECRET=<privy_secret>
-ENCRYPTION_SECRET=<32_char_hex>
-AGENT_API_SECRET=dev_secret_123
-
-# frontend/.env
-VITE_API_URL=http://localhost:3001
-
-# agent/.env
-BACKEND_URL=http://localhost:3001
-AGENT_API_SECRET=dev_secret_123
-PACIFICA_PRIVATE_KEY=<your_key>
-PACIFICA_AGENT_PRIVATE_KEY=<agent_key>
-GEMINI_API_KEY=<gemini_key>
-DRY_RUN=true`}
-                  </pre>
                 </div>
               </div>
             </section>
@@ -633,7 +586,7 @@ DRY_RUN=true`}
                   {[
                     {
                       issue: "Agent shows 'Backend not running'",
-                      fix: "Ensure backend is running on port 3001. Check BACKEND_URL in agent/.env matches."
+                      fix: "Ensure backend is running on port 3001 (npm start in /backend). Check BACKEND_URL=http://localhost:3001 in agent/.env."
                     },
                     {
                       issue: "No market data appearing",
@@ -641,7 +594,7 @@ DRY_RUN=true`}
                     },
                     {
                       issue: "Agent disconnected after sleep",
-                      fix: "Agent requires constant connection. Deploy to Render for 24/7 uptime."
+                      fix: "Agent requires constant connection. Deploy to Render/VPS for 24/7 uptime."
                     },
                     {
                       issue: "Orders failing with 'insufficient balance'",
@@ -654,6 +607,10 @@ DRY_RUN=true`}
                     {
                       issue: "Heartbeat timeout in UI",
                       fix: "Agent sends heartbeat every cycle. If offline >10 min, check agent terminal for errors."
+                    },
+                    {
+                      issue: "Frontend can't reach backend",
+                      fix: "Verify backend is running on port 3001 and VITE_API_URL=http://localhost:3001 in frontend/.env."
                     }
                   ].map((item, i) => (
                     <div key={i} className="p-6 bg-zinc-950/20 border border-zinc-900">
